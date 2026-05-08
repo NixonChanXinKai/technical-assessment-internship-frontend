@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, AfterViewInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -16,14 +16,15 @@ interface FormData {
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {
-  protected readonly title = signal('angular-app');
+export class App implements AfterViewInit {
+  protected readonly title = signal('technical-assessment-internship-frontend');
   contactForm: FormGroup;
   formSubmitted = signal(false);
   submitError = signal('');
   submitSuccess = signal('');
   isLoading = signal(false);
   submittedData = signal<FormData | null>(null);
+  modalInstance: any = null;
 
   constructor(private fb: FormBuilder, private http: HttpClient) {
     this.contactForm = this.fb.group({
@@ -31,6 +32,16 @@ export class App {
       email: ['', [Validators.required, Validators.email]],
       message: ['', [Validators.required, Validators.minLength(10)]]
     });
+  }
+
+  ngAfterViewInit() {
+    // Get modal instance after view init
+    if (typeof window !== 'undefined' && (window as any).bootstrap) {
+      const modalElement = document.getElementById('resultModal');
+      if (modalElement) {
+        this.modalInstance = new (window as any).bootstrap.Modal(modalElement);
+      }
+    }
   }
 
   get name() {
@@ -69,8 +80,18 @@ export class App {
         console.log('Success:', response);
         this.submittedData.set(formData);
         this.submitSuccess.set('Form submitted successfully!');
-        this.contactForm.reset();
-        this.formSubmitted.set(false);
+        
+        // Show modal
+        if (this.modalInstance) {
+          this.modalInstance.show();
+        }
+        
+        // Reset form after a delay
+        setTimeout(() => {
+          this.contactForm.reset();
+          this.formSubmitted.set(false);
+        }, 2000);
+        
         this.isLoading.set(false);
       },
       error: (error) => {

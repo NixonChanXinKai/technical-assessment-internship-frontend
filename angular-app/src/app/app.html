@@ -1,7 +1,81 @@
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="#">{{ title() }}</a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="#home">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#about">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#contact">Contact</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ================= CARD GRID ================= -->
 <div class="container mt-5">
+  <div class="row">
+    <!-- CARD 1 -->
+    <div class="col-md-4 mb-4">
+      <div class="card h-100">
+        <img src="https://picsum.photos/400/250?random=1" class="card-img-top" alt="Card image 1">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">Bootstrap Framework</h5>
+          <p class="card-text">
+            Responsive web design made easy with Bootstrap's powerful grid system and components.
+          </p>
+          <a href="#" class="btn btn-primary mt-auto">Learn More</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 2 -->
+    <div class="col-md-4 mb-4">
+      <div class="card h-100">
+        <img src="https://picsum.photos/400/250?random=2" class="card-img-top" alt="Card image 2">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">Angular SPA</h5>
+          <p class="card-text">
+            Modern Single Page Application built with Angular, featuring reactive forms and HTTP integration.
+          </p>
+          <a href="#" class="btn btn-primary mt-auto">Learn More</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 3 -->
+    <div class="col-md-4 mb-4">
+      <div class="card h-100">
+        <img src="https://picsum.photos/400/250?random=3" class="card-img-top" alt="Card image 3">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">Form Validation</h5>
+          <p class="card-text">
+            Comprehensive form validation with real-time error feedback and business logic implementation.
+          </p>
+          <a href="#" class="btn btn-primary mt-auto">Learn More</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= CONTACT FORM SECTION ================= -->
+<div class="container mt-5 mb-5" id="contact">
+  <h2 class="text-center mb-4">Contact Us</h2>
   <div class="row justify-content-center">
     <div class="col-md-8">
-      <h1 class="mb-4 text-center">{{ title() }} - Contact Form</h1>
+      <h3 class="mb-4">Send us a message</h3>
 
       <!-- Success Message -->
       @if (submitSuccess()) {
@@ -111,6 +185,8 @@
         </div>
       </form>
 
+      </form>
+
       <!-- Submitted Data Display -->
       @if (submittedData()) {
         <div class="card mt-4 p-4 bg-light">
@@ -125,35 +201,47 @@
   </div>
 </div>
 
+<!-- ================= MODAL ================= -->
+<div class="modal fade" id="resultModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Form Submission Result</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        @if (submittedData()) {
+          <p><strong>Name:</strong> {{ submittedData()?.name }}</p>
+          <p><strong>Email:</strong> {{ submittedData()?.email }}</p>
+          <p><strong>Message:</strong> {{ submittedData()?.message }}</p>
+          <small class="text-muted">Successfully submitted to the server!</small>
+        }
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <style>
-  :host {
-    display: block;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
-    padding: 2rem 0;
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   }
 
-  .container {
-    max-width: 600px;
-  }
-
-  h1 {
-    color: white;
-    font-weight: 600;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  .navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   .card {
-    border: none;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
-  .form-control:focus,
-  .form-control.is-invalid:focus {
-    border-color: #667eea;
-    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
   }
 
   .btn-primary {
@@ -162,9 +250,15 @@
     transition: transform 0.2s ease;
   }
 
-  .btn-primary:hover:not(:disabled) {
+  .btn-primary:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  }
+
+  .form-control:focus,
+  .form-control.is-invalid:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
   }
 
   .invalid-feedback {
@@ -173,9 +267,19 @@
     margin-top: 0.25rem;
   }
 
-  .bg-light {
-    background: rgba(255, 255, 255, 0.95) !important;
-    border-radius: 12px;
+  .alert {
+    animation: slideIn 0.3s ease-in-out;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 </style>
 
